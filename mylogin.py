@@ -12,11 +12,13 @@ form = cgi.FieldStorage()
 input_username = form.getvalue('username')
 input_password = form.getvalue('password')
 
+# set cookie if the account is correct
 if username == input_username and password == input_password:
     print("Content-type:text/html")
     print(f"Set-Cookie:loginCorrect = True\r\n")
 else:
     print("Content-type:text/html\r\n\r\n")
+# display input account
 print("<html>")
 print("<head>")
 print("<title>Hello - Second CGI Program</title>")
@@ -26,7 +28,7 @@ print("<p><b>Username</b> %s <b>password</b> %s</p>" % (input_username, input_pa
 print("</body>")
 print("</html>")
 
-
+# If the cookie says user correctly logged in, display secret message
 for param in os.environ.keys():
     if (param=="HTTP_COOKIE"):
         cookie_parameter = os.environ[param]
