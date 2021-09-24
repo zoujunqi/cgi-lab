@@ -3,7 +3,7 @@ import cgi
 import cgitb
 import os
 from secret import username, password
-from templates import secret_page
+from templates import secret_page, after_login_incorrect
 
 # Create instance of FieldStorage
 form = cgi.FieldStorage()
@@ -12,25 +12,24 @@ form = cgi.FieldStorage()
 input_username = form.getvalue('username')
 input_password = form.getvalue('password')
 
-# set cookie if the account is correct
 if username == input_username and password == input_password:
+    # if the input account is correct
     print("Content-type:text/html")
     print(f"Set-Cookie:loginCorrect = True\r\n")
+    print("<html>")
+    print("<head>")
+    print("<title>Hello - Second CGI Program</title>")
+    print("</head>")
+    print("<body>")
+    print("<p><b>Username</b> %s <b>password</b> %s</p>" % (input_username, input_password))
+    print("</body>")
+    print("</html>")
+    # check if account is logged in, if yes, display secret message
+    for param in os.environ.keys():
+        if (param == "HTTP_COOKIE"):
+            cookie_parameter = os.environ[param]
+            if 'loginCorrect=True' in cookie_parameter:
+                print(secret_page(username, password))
 else:
-    print("Content-type:text/html\r\n\r\n")
-# display input account
-print("<html>")
-print("<head>")
-print("<title>Hello - Second CGI Program</title>")
-print("</head>")
-print("<body>")
-print("<p><b>Username</b> %s <b>password</b> %s</p>" % (input_username, input_password))
-print("</body>")
-print("</html>")
+    print(after_login_incorrect())
 
-# If the cookie says user correctly logged in, display secret message
-for param in os.environ.keys():
-    if (param=="HTTP_COOKIE"):
-        cookie_parameter = os.environ[param]
-        if 'loginCorrect=True' in cookie_parameter:
-            print(secret_page(username, password))
