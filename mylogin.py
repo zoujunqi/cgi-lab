@@ -15,7 +15,6 @@ input_password = form.getvalue('password')
 if username == input_username and password == input_password:
     print("Content-type:text/html")
     print(f"Set-Cookie:loginCorrect = True\r\n")
-    #print(secret_page(username, password))
 else:
     print("Content-type:text/html\r\n\r\n")
 print("<html>")
